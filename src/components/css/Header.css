@@ -1,0 +1,15 @@
+/* Smooth transitions for header elements */
+header a, header button {
+  transition: all 0.3s ease;
+}
+
+/* Active link indicator animation */
+@keyframes activePulse {
+  0% { opacity: 0.7; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 0.7; transform: scale(0.95); }
+}
+
+.router-link-active {
+  animation: activePulse 2s ease-in-out infinite;
+}

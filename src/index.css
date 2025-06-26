@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: rgba(10, 10, 10, 0.9);
+    --foreground: rgba(255, 255, 255, 0.85);
+    --primary: #34b5d2; /* Main blue color */
+    --secondary: #089feb; /* Lighter blue for accents */
+    --card: rgba(255, 255, 255, 0.15);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --radius: 0.75rem;
+    
+    /* New glass effect variables */
+    --glass-blur: 12px;
+    --glass-opacity: 0.2;
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3 {
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Enhanced Glassmorphism Effect */
+.glass-effect {
+  backdrop-filter: blur(var(--glass-blur));
+  background: rgba(255, 255, 255, var(--glass-opacity));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  z-index: -1;
+}
+
+.glass-effect-hover:hover {
+  transform: translateY(-5px);
+  --glass-opacity: 0.3;
+  --glass-blur: 16px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+.glass-card:hover {
+  --glass-border-opacity: 0.25;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Background gradients for cards */
+.bg-glass-purple {
+  background: rgba(139, 92, 246, 0.15); /* purple-500 */
+}
+.bg-glass-cyan {
+  background: rgba(6, 182, 212, 0.15); /* cyan-500 */
+}
+.bg-glass-amber {
+  background: rgba(245, 158, 11, 0.15); /* amber-500 */
+}
+.bg-glass-blue {
+  background: rgba(59, 130, 246, 0.15); /* blue-500 */
+}
+.bg-glass-emerald {
+  background: rgba(16, 185, 129, 0.15); /* emerald-500 */
+}
+.bg-glass-pink {
+  background: rgba(236, 72, 153, 0.15); /* pink-500 */
+}
+
+/* Noise texture for better glass effect */
+.glass-noise {
+  position: relative;
+}
+
+.glass-noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 2s ease-out;
+}
+
+.slide-in-up {
+  animation: slideInUp 1.5s ease-out;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Smooth transitions */
+[data-animate] {
+  will-change: transform, opacity;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Text shadow */
+.text-shadow {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* New utility for gradient text */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Responsive backdrop blur - fallback for older browsers */
+@supports not (backdrop-filter: blur(12px)) {
+  .glass-effect {
+    background: rgba(10, 10, 10, 0.8);
+  }
+}

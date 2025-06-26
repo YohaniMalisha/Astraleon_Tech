@@ -1,0 +1,55 @@
+/* About.css */
+.hero-section {
+  padding: 6rem 0;
+}
+
+.stats-section {
+  padding: 4rem 0;
+}
+
+.story-container {
+  padding: 4rem 0;
+}
+
+.team-section {
+  padding: 4rem 0;
+}
+
+/* Team member images */
+.team-member-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(52, 181, 210, 0.5);
+  box-shadow: 0 4px 20px rgba(52, 181, 210, 0.2);
+  transition: all 0.3s ease;
+}
+
+.team-member-card:hover .team-member-image {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(52, 181, 210, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 4rem 0;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .team-member-image {
+    width: 100px;
+    height: 100px;
+  }
+}
+

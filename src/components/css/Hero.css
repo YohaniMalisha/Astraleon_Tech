@@ -1,0 +1,229 @@
+/* Hero Section */
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 1rem;
+}
+
+/* Background Elements */
+.hero-background {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom right, var(--background), var(--card));
+}
+
+.background-circle {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 255, 0.2);
+}
+
+.background-circle.top-left {
+  top: 5rem;
+  left: 2.5rem;
+  width: 18rem;
+  height: 18rem;
+}
+
+.background-circle.bottom-right {
+  bottom: 5rem;
+  right: 2.5rem;
+  width: 24rem;
+  height: 24rem;
+}
+
+/* Hero Image */
+.hero-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-image__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.2;
+}
+
+.hero-image__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+/* Hero Heading */
+.hero-heading {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 3rem;
+  background-clip: text;
+  color: transparent;
+  animation: fadeIn 2s ease-out;
+}
+
+/* Hero Paragraph */
+.hero-paragraph {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Hero Description */
+.hero-description {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 2rem;
+  max-width: 50rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* CTA Buttons */
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.cta-button {
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.cta-button--primary {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+}
+
+.cta-button--primary:hover {
+  background-color: var(--secondary); /* Use secondary color on hover */
+  opacity: 0.9;
+}
+
+.cta-button--outline {
+  background-color: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+.cta-button--outline:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* Features Grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature-card {
+  background: var(--glass-bg);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.feature-card__content {
+  padding: 2rem;
+  text-align: center;
+}
+
+.feature-card__icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card__description {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-card {
+  background: var(--glass-bg);
+  border-radius: var(--radius);
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.stat-card__number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.stat-card__text {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Navbar Layout (Right Align Links) */
+.hero-section .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hero-section .ml-auto {
+  margin-left: auto;
+}
+
+@media (max-width: 768px) {
+  .hero-section .container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.hero-section .container a {
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin-right: 1.5rem;
+}
+
+.hero-section .container a:hover {
+  color: var(--primary); 
+  transition: color 0.3s ease;
+}

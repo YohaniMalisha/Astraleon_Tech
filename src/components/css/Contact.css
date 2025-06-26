@@ -1,0 +1,140 @@
+/* Contact.css */
+/* Color Definitions */
+:root {
+  --primary: #3b82f6; /* Blue-500 */
+  --primary-dark: #2563eb; /* Blue-600 */
+  --purple: #7c3aed; /* Purple-600 */
+  --background: #ffffff;
+  --foreground: #111827;
+  --muted-foreground: #6b7280;
+  --border: #e5e7eb;
+}
+
+.dark {
+  --primary: #60a5fa; /* Blue-400 */
+  --primary-dark: #3b82f6; /* Blue-500 */
+  --purple: #8b5cf6; /* Purple-500 */
+  --background: #111827;
+  --foreground: #f9fafb;
+  --muted-foreground: #9ca3af;
+  --border: #374151;
+}
+
+/* Base Styles */
+.contact-section {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background Elements */
+.contact-section .absolute.rounded-full {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Header Styles */
+.contact-section .bg-primary\/10 {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+.contact-section .text-primary {
+  color: var(--primary) !important;
+}
+
+.contact-section .bg-gradient-to-r.from-primary.to-purple-600 {
+  background-image: linear-gradient(to right, var(--primary), var(--purple)) !important;
+}
+
+/* Card Styles */
+.contact-section .bg-white\/90 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.dark .contact-section .bg-gray-800\/90 {
+  background-color: rgba(31, 41, 55, 0.9) !important;
+}
+
+.contact-section .border-gray-200 {
+  border-color: var(--border) !important;
+}
+
+.dark .contact-section .border-gray-700 {
+  border-color: var(--border) !important;
+}
+
+/* Form Element Styles */
+.contact-section input,
+.contact-section textarea,
+.contact-section select {
+  background-color: var(--background) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.contact-section input:focus,
+.contact-section textarea:focus,
+.contact-section select:focus {
+  outline: none !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Button Styles */
+.contact-section .bg-gradient-to-r.from-primary.to-purple-600 {
+  background-image: linear-gradient(to right, var(--primary), var(--purple)) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.contact-section .hover\:from-primary\/90:hover {
+  background-image: linear-gradient(to right, var(--primary-dark), var(--purple)) !important;
+}
+
+/* Icon Styles */
+.contact-section svg.text-primary {
+  color: var(--primary) !important;
+}
+
+/* FAQ Card Styles */
+.contact-section .bg-primary\/10 {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+.contact-section .hover\:border-primary\/50:hover {
+  border-color: rgba(59, 130, 246, 0.5) !important;
+}
+
+/* Text Colors */
+.contact-section .text-muted-foreground {
+  color: var(--muted-foreground) !important;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.contact-section .group:hover .group-hover\:translate-x-1 {
+  transform: translateX(0.25rem) !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .contact-section .text-4xl {
+    font-size: 2.25rem !important;
+    line-height: 2.5rem !important;
+  }
+  
+  .contact-section .py-20 {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+  }
+  
+  .contact-section .gap-12 {
+    gap: 3rem !important;
+  }
+}
