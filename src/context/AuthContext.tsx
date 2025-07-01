@@ -1,117 +1,71 @@
-import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
-import { toast } from 'sonner';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '@/lib/api';
+import { toast } from 'sonner';
 
-interface User {
+type User = {
   id: string;
   email: string;
   name: string;
-  token: string;
-}
+};
 
-interface AuthContextType {
+type AuthContextType = {
   user: User | null;
-  isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
-  loading: boolean;
-}
+  isAuthenticated: boolean;
+};
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Check for existing session on initial load
+  // Check if user is logged in on app load
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // In production, verify token with backend
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-          setUser(JSON.parse(storedUser));
-        }
-      } catch (error) {
-        console.error('Auth check failed:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
+    const token = localStorage.getItem('token');
+    if (token) fetchUser();
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
+  const fetchUser = async () => {
     try {
-      setLoading(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In production, this would come from your backend
-      const userData = {
-        id: 'user-123',
-        email,
-        name: email.split('@')[0],
-        token: 'simulated-token'
-      };
-
-      setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
-      toast.success('Login successful');
-      navigate('/packages');
-    } catch (error) {
-      toast.error('Login failed. Please check your credentials.');
-      throw error;
-    } finally {
-      setLoading(false);
+      const { data } = await api.get('/auth/me');
+      setUser(data.user);
+    } catch (err) {
+      logout();
     }
-  }, [navigate]);
+  };
 
-  const register = useCallback(async (name: string, email: string, password: string) => {
-    try {
-      setLoading(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In production, this would come from your backend
-      const userData = {
-        id: 'user-123',
-        email,
-        name,
-        token: 'simulated-token'
-      };
+  const login = async (email: string, password: string) => {
+    const { data } = await api.post('/auth/login', { email, password });
+    localStorage.setItem('token', data.token);
+    setUser(data.user);
+    navigate('/dashboard');
+  };
 
-      setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
-      toast.success('Registration successful');
-      navigate('/packages');
-    } catch (error) {
-      toast.error('Registration failed. Please try again.');
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }, [navigate]);
+  const register = async (name: string, email: string, password: string) => {
+    const { data } = await api.post('/auth/register', { name, email, password });
+    localStorage.setItem('token', data.token);
+    setUser(data.user);
+    navigate('/dashboard');
+  };
 
-  const logout = useCallback(() => {
+  const logout = () => {
+    localStorage.removeItem('token');
     setUser(null);
-    localStorage.removeItem('user');
-    toast.success('Logged out successfully');
-    navigate('/');
-  }, [navigate]);
+    navigate('/login');
+  };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated: !!user,
         login,
         register,
         logout,
-        loading
+        isAuthenticated: !!user,
       }}
     >
       {children}
@@ -119,10 +73,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useAuth = (): AuthContextType => {
+export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error('useAuth must be used within AuthProvider');
   return context;
 };

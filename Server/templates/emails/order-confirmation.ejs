@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { color: #3b82f6; text-align: center; }
+        .order-details { background: #f9f9f9; padding: 20px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">Thank You for Your Order!</h1>
+        
+        <div class="order-details">
+            <h2><%= order.package.name %></h2>
+            <p><strong>Total:</strong> <%= order.totalPrice %></p>
+            
+            <% if (order.addOns.length > 0) { %>
+                <h3>Additional Services:</h3>
+                <ul>
+                    <% order.addOns.forEach(addon => { %>
+                        <li><%= addon.name %> - <%= addon.price %></li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </div>
+
+        <p>Our team will contact you within 24 hours to discuss the next steps.</p>
+        <p>Thank you for choosing our services!</p>
+    </div>
+</body>
+</html>

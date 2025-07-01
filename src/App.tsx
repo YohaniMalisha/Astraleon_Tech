@@ -3,9 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from "framer-motion";
 import Index from "./pages/Index";
-import ServicesPage from './pages/Services';
+import ServicesPage from "./pages/Services";
 import PortfolioPage from "./pages/Portfolio";
 import AboutPage from "./pages/About";
 import ContactPage from "./pages/Contact";
@@ -17,8 +17,11 @@ import EcommercePackages from "./pages/packages/EcommercePackages";
 import BlogPackages from "./pages/packages/BlogPackages";
 import CustomPackages from "./pages/packages/CustomPackages";
 import PackageCheckout from "./components/PackageCheckout";
-import { PackageProvider } from './context/PackageContext';
-import { AuthProvider } from '@/context/AuthContext';
+import { PackageProvider } from "./context/PackageContext";
+import { AuthProvider } from "@/context/AuthContext";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+
 
 const queryClient = new QueryClient();
 
@@ -30,30 +33,33 @@ const App = () => (
       <BrowserRouter>
         <AnimatePresence mode="wait">
           <AuthProvider>
-          <PackageProvider>
-            <Routes>
-              {/* Main Routes */}
-              <Route path="/" element={<Index />} />
-              <Route path="/services" element={<ServicesPage />} />
-              <Route path="/portfolio" element={<PortfolioPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              
-              {/* Packages Nested Routes */}
-              <Route path="/packages" element={<PackagesPage />}>
-                <Route index element={<Packages />} />
-                <Route path="portfolio" element={<PortfolioPackages />} />
-                <Route path="ecommerce" element={<EcommercePackages />} />
-                <Route path="blog" element={<BlogPackages />} />
-                <Route path="custom" element={<CustomPackages />} />
-                <Route path=":type/checkout" element={<PackageCheckout />} />
-              </Route>
-              
-              {/* 404 Route */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            
-          </PackageProvider>
+            <PackageProvider>
+              <Routes>
+                {/* Main Routes */}
+                <Route path="/" element={<Index />} />
+                <Route path="/services" element={<ServicesPage />} />
+                <Route path="/portfolio" element={<PortfolioPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+
+                {/* Auth Routes */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+
+                {/* Packages Nested Routes */}
+                <Route path="/packages" element={<PackagesPage />}>
+                  <Route index element={<Packages />} />
+                  <Route path="portfolio" element={<PortfolioPackages />} />
+                  <Route path="ecommerce" element={<EcommercePackages />} />
+                  <Route path="blog" element={<BlogPackages />} />
+                  <Route path="custom" element={<CustomPackages />} />
+                  <Route path=":type/checkout" element={<PackageCheckout />} />
+                </Route>
+
+                {/* 404 Route */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </PackageProvider>
           </AuthProvider>
         </AnimatePresence>
       </BrowserRouter>

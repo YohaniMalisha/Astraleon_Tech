@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .order { background: #f0f0f0; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h2>New Order Received</h2>
+    
+    <div class="order">
+        <h3><%= order.package.name %></h3>
+        <p><strong>Customer Email:</strong> <%= order.userEmail %></p>
+        <p><strong>Total:</strong> <%= order.totalPrice %></p>
+        
+        <% if (order.addOns.length > 0) { %>
+            <h4>Add-ons:</h4>
+            <ul>
+                <% order.addOns.forEach(addon => { %>
+                    <li><%= addon.name %> (<%= addon.price %>)</li>
+                <% }); %>
+            </ul>
+        <% } %>
+    </div>
+
+    <p>Order received at: <%= new Date().toLocaleString() %></p>
+</body>
+</html>

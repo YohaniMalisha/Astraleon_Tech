@@ -1,14 +1,15 @@
-// src/context/PackageContext.tsx
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 
 interface AddOn {
+  id: string;
   name: string;
   price: string;
   icon: string;
 }
 
 interface Package {
+  id: string;
   name: string;
   price: string;
   features: string[];
@@ -20,62 +21,113 @@ interface Package {
   additionalPagePrice?: string;
 }
 
-interface PackageContextType {
-  selectedPackage: Package | null;
-  selectedAddOns: AddOn[];
+interface Order {
+  package: Package | null;
+  addOns: AddOn[];
   totalPrice: string;
+}
+
+interface PackageContextType {
+  order: Order;
   selectPackage: (pkg: Package) => void;
   addAddOn: (addon: AddOn) => void;
-  removeAddOn: (index: number) => void;
-  resetSelection: () => void;
+  removeAddOn: (addonId: string) => void;
+  clearOrder: () => void;
   submitOrder: (userEmail: string) => Promise<boolean>;
 }
 
 const PackageContext = createContext<PackageContextType | undefined>(undefined);
 
 export const PackageProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
-  const [selectedAddOns, setSelectedAddOns] = useState<AddOn[]>([]);
-  const [totalPrice, setTotalPrice] = useState<string>('LKR 0');
+  const [order, setOrder] = useState<Order>({
+    package: null,
+    addOns: [],
+    totalPrice: 'LKR 0'
+  });
 
-  // ... (previous functions remain the same)
+  const calculateTotal = useCallback(() => {
+    const base = order.package ? parseInt(order.package.price.replace(/\D/g, '')) || 0 : 0;
+    const addOnsTotal = order.addOns.reduce((sum, addon) => {
+      return sum + (parseInt(addon.price.replace(/\D/g, '')) || 0);
+    }, 0);
+    return `LKR ${(base + addOnsTotal).toLocaleString()}`;
+  }, [order.package, order.addOns]);
 
-  const submitOrder = async (userEmail: string) => {
+  useEffect(() => {
+    setOrder(prev => ({
+      ...prev,
+      totalPrice: calculateTotal()
+    }));
+  }, [calculateTotal]);
+
+  const selectPackage = useCallback((pkg: Package) => {
+    setOrder(prev => ({
+      ...prev,
+      package: pkg
+    }));
+  }, []);
+
+  const addAddOn = useCallback((addon: AddOn) => {
+    setOrder(prev => ({
+      ...prev,
+      addOns: [...prev.addOns, addon]
+    }));
+  }, []);
+
+  const removeAddOn = useCallback((addonId: string) => {
+    setOrder(prev => ({
+      ...prev,
+      addOns: prev.addOns.filter(addon => addon.id !== addonId)
+    }));
+  }, []);
+
+  const clearOrder = useCallback(() => {
+    setOrder({
+      package: null,
+      addOns: [],
+      totalPrice: 'LKR 0'
+    });
+  }, []);
+
+  const submitOrder = useCallback(async (userEmail: string): Promise<boolean> => {
     try {
-      // In a real app, you would send this to your backend
+      if (!order.package) {
+        throw new Error('No package selected');
+      }
+
+      // In production, you would:
+      // 1. Send to your backend API
+      // 2. Backend would send emails (admin + confirmation)
+      // 3. Backend would store in database
       const orderData = {
-        package: selectedPackage,
-        addOns: selectedAddOns,
-        totalPrice,
         userEmail,
-        date: new Date().toISOString()
+        package: order.package,
+        addOns: order.addOns,
+        totalPrice: order.totalPrice,
+        orderDate: new Date().toISOString()
       };
+
+      console.log('Order submitted:', orderData); // Remove in production
 
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Here you would typically:
-      // 1. Send email to admin
-      // 2. Send confirmation to client
-      // 3. Clear the selection
-      
+
       return true;
     } catch (error) {
       console.error('Order submission failed:', error);
+      toast.error('Failed to submit order. Please try again.');
       return false;
     }
-  };
+  }, [order]);
 
   return (
     <PackageContext.Provider
       value={{
-        selectedPackage,
-        selectedAddOns,
-        totalPrice,
+        order,
         selectPackage,
         addAddOn,
         removeAddOn,
-        resetSelection,
+        clearOrder,
         submitOrder
       }}
     >
@@ -84,9 +136,9 @@ export const PackageProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const usePackage = () => {
+export const usePackage = (): PackageContextType => {
   const context = useContext(PackageContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('usePackage must be used within a PackageProvider');
   }
   return context;
