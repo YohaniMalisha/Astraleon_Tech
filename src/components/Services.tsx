@@ -1,4 +1,4 @@
-import { Layout, ShoppingCart, Search, Zap, Code, Rocket, ArrowRight, Check } from 'lucide-react';
+import { Layout, ShoppingCart, Search, Zap, Code, Rocket, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/lib/animations';
 
@@ -65,13 +65,10 @@ const Services = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full text-sm font-medium mb-6"
-            >
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full text-sm font-medium mb-6">
               <Rocket className="mr-3" size={16} />
               <span className="text-white">OUR SERVICES</span>
-            </motion.div>
+            </div>
             <h2 className="text-5xl md:text-6xl font-bold mb-6 text-white">
               What We <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Offer</span>
             </h2>
@@ -103,7 +100,7 @@ const Services = () => {
                   
                   <p className="text-gray-300 mb-5">{service.description}</p>
                   
-                  <ul className="space-y-3 mb-6 flex-grow">
+                  <ul className="space-y-3">
                     {service.features.map((feature, i) => (
                       <li key={i} className="flex items-start text-gray-300">
                         <Check className="w-4 h-4 mt-0.5 mr-3 text-blue-400 flex-shrink-0" />
@@ -111,18 +108,6 @@ const Services = () => {
                       </li>
                     ))}
                   </ul>
-                  
-                  <motion.button
-                    whileHover={{ 
-                      scale: 1.03,
-                      boxShadow: `0 0 15px rgba(59, 130, 246, 0.7)`
-                    }}
-                    whileTap={{ scale: 0.97 }}
-                    className={`mt-auto w-full py-3 text-sm font-medium rounded-lg text-white transition-all flex items-center justify-center group bg-gradient-to-r ${service.gradient}`}
-                  >
-                    <span>Learn more</span>
-                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </motion.button>
                 </div>
               </motion.div>
             ))}

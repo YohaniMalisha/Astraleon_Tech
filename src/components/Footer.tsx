@@ -19,7 +19,7 @@ const Footer = () => {
               whileHover={{ scale: 1.02 }}
               className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 uppercase tracking-wide"
             >
-              CODENTRA PRO
+              Astraleon Tech
             </motion.div>
             <p className="text-gray-400 text-base">
               Professional web development services delivered online.
@@ -97,7 +97,7 @@ const Footer = () => {
         {/* Footer Bottom - Maintained Alignment */}
         <div className="border-t border-blue-900/30 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm md:text-left">
-            © {currentYear} Codentra Pro. All rights reserved.
+            © {currentYear} Astraleon Tech. All rights reserved.
           </p>
           
           <motion.button

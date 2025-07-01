@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,14 +6,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Mail, Phone, MessageSquare, Clock, 
-  Zap, Shield, Palette, Send, Rocket 
+  Zap, Shield, Palette, Send, Rocket, Loader2 
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { fadeInUp, staggerContainer, fadeIn } from "@/lib/animations";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { fadeInUp, fadeIn } from "@/lib/animations";
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
+  const form = useRef<HTMLFormElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,7 +24,6 @@ const Contact = () => {
     service: "",
     message: "",
   });
-  const { toast } = useToast();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -33,27 +35,45 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const sendEmail = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setIsSubmitting(true);
 
-    toast({
-      title: "🚀 Message Sent!",
-      description: "Our team will contact you within 24 hours.",
-      style: {
-        backgroundColor: '#1e3a8a',
-        color: 'white',
-        border: 'none'
-      }
-    });
+    try {
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        form.current!,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
 
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      service: "",
-      message: "",
-    });
+      toast({
+        title: "🚀 Message Sent Successfully!",
+        description: "Astraleon Tech team will contact you within 24 hours.",
+        style: {
+          backgroundColor: '#1e3a8a',
+          color: 'white',
+          border: 'none'
+        }
+      });
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        service: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again or contact us directly at astraleontech@gmail.com",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const services = [
@@ -83,52 +103,51 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-900 via-black to-black">
-      {/* Decorative elements matching other pages */}
+      {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden opacity-10">
         <div className="absolute -left-20 -top-20 w-64 h-64 bg-purple-500 rounded-full mix-blend-screen filter blur-3xl"></div>
         <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-cyan-500 rounded-full mix-blend-screen filter blur-3xl"></div>
       </div>
+
       <main className="flex-grow py-24 px-4 relative z-10">
         <div className="container mx-auto">
-          {/* Updated Header Section */}
+          {/* Header Section - Removed animation from CONTACT ASTRALEON TECH */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full text-sm font-medium mb-6"
-            >
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full text-sm font-medium mb-6">
               <Rocket className="mr-3" size={16} />
-              <span className="text-white">CONTACT US</span>
-            </motion.div>
+              <span className="text-white">CONTACT ASTRALEON TECH</span>
+            </div>
             <h2 className="text-5xl md:text-6xl font-bold mb-6 text-white">
-              Let's Create <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Magic</span>
+              Let's Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Together</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Ready to start your journey? Reach out and let's build something extraordinary.
+              Have a project in mind? Reach out and let's discuss how we can bring your vision to life.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
-            <motion.div
-              variants={fadeInUp}
-            >
+            <motion.div variants={fadeInUp}>
               <Card className="bg-gray-900/80 backdrop-blur-sm border border-gray-700 hover:border-blue-500 transition-all">
                 <CardHeader>
                   <CardTitle className="text-3xl font-bold flex items-center gap-3 text-white">
                     <MessageSquare className="text-blue-400" size={28} />
-                    Start Your Project
+                    Contact Our Team
                   </CardTitle>
                   <p className="text-gray-400 text-lg">
                     We'll respond within 24 hours
                   </p>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form ref={form} onSubmit={sendEmail} className="space-y-6">
+                    <input type="hidden" name="contact_number" value={Date.now()} />
+                    <input type="hidden" name="to_email" value="astraleontech@gmail.com" />
+                    
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="block text-sm font-medium text-gray-300">
@@ -140,6 +159,7 @@ const Contact = () => {
                           value={formData.name}
                           onChange={handleInputChange}
                           className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus-visible:ring-blue-400"
+                          placeholder="" // Removed placeholder text
                         />
                       </div>
                       <div className="space-y-2">
@@ -153,6 +173,7 @@ const Contact = () => {
                           value={formData.email}
                           onChange={handleInputChange}
                           className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus-visible:ring-blue-400"
+                          placeholder="" // Removed placeholder text
                         />
                       </div>
                     </div>
@@ -168,6 +189,7 @@ const Contact = () => {
                           value={formData.phone}
                           onChange={handleInputChange}
                           className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus-visible:ring-blue-400"
+                          placeholder="" // Removed placeholder text
                         />
                       </div>
                       <div className="space-y-2">
@@ -201,28 +223,32 @@ const Contact = () => {
                         rows={6}
                         value={formData.message}
                         onChange={handleInputChange}
-                        placeholder="Tell us about your vision..."
                         className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus-visible:ring-blue-400"
+                        placeholder="" // Removed placeholder text
                       />
                     </div>
 
+                    {/* Modified Send Button - Smaller and rounded edges */}
                     <motion.button 
-  type="submit"
-  whileHover={{ 
-    scale: 1.03,
-    boxShadow: "0 0 15px rgba(59, 130, 246, 0.7)"
-  }}
-  whileTap={{ scale: 0.97 }}
-  className="w-full py-6 text-xl font-bold relative overflow-hidden group"
->
-  <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 group-hover:from-blue-700 group-hover:to-blue-800 transition-all duration-300"></span>
-  <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
-  <span className="relative z-10 flex items-center justify-center">
-    <Send className="mr-3 animate-pulse group-hover:animate-none" size={18} />
-    <span className="text-white">Send Message</span>
-    <span className="absolute right-6 w-4 h-4 border-t-2 border-r-2 border-white transform rotate-45 translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300"></span>
-  </span>
-</motion.button>
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full py-4 text-lg font-bold relative overflow-hidden group rounded-full" // Changed py-6 to py-4 and added rounded-full
+                    >
+                      <span className={`absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 ${isSubmitting ? 'opacity-80' : 'group-hover:from-blue-700 group-hover:to-blue-800'} transition-all duration-300 rounded-full`}></span>
+                      <span className="relative z-10 flex items-center justify-center">
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-3 h-5 w-5 animate-spin" /> {/* Adjusted size */}
+                            <span>Sending...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send className="mr-3 h-5 w-5" /> {/* Adjusted size */}
+                            <span>Send Message</span>
+                          </>
+                        )}
+                      </span>
+                    </motion.button>
                   </form>
                 </CardContent>
               </Card>
@@ -240,7 +266,7 @@ const Contact = () => {
                   Common Questions
                 </h3>
                 <p className="text-gray-400 text-lg mb-8">
-                  Everything you need to know
+                  Everything you need to know about working with Astraleon Tech
                 </p>
               </div>
               <div className="space-y-6">

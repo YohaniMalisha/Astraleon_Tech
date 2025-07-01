@@ -28,7 +28,7 @@ export default function Header() {
           to="/" 
           className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 font-poppins uppercase tracking-wide hover:from-blue-300 hover:to-cyan-200 transition-all"
         >
-          CODENTRA PRO
+          Astraleon Tech
         </Link>
 
         {/* Desktop Navigation */}
