@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 
 interface AddOn {
@@ -15,10 +15,6 @@ interface Package {
   features: string[];
   popular?: boolean;
   description?: string;
-  productLimit?: string;
-  pageLimit?: string;
-  postLimit?: string;
-  additionalPagePrice?: string;
 }
 
 interface Order {
@@ -38,7 +34,7 @@ interface PackageContextType {
 
 const PackageContext = createContext<PackageContextType | undefined>(undefined);
 
-export const PackageProvider = ({ children }: { children: ReactNode }) => {
+export const PackageProvider = ({ children }: { children: React.ReactNode }) => {
   const [order, setOrder] = useState<Order>({
     package: null,
     addOns: [],
@@ -95,10 +91,6 @@ export const PackageProvider = ({ children }: { children: ReactNode }) => {
         throw new Error('No package selected');
       }
 
-      // In production, you would:
-      // 1. Send to your backend API
-      // 2. Backend would send emails (admin + confirmation)
-      // 3. Backend would store in database
       const orderData = {
         userEmail,
         package: order.package,
@@ -107,11 +99,9 @@ export const PackageProvider = ({ children }: { children: ReactNode }) => {
         orderDate: new Date().toISOString()
       };
 
-      console.log('Order submitted:', orderData); // Remove in production
-
-      // Simulate API call
+      console.log('Order submitted:', orderData);
       await new Promise(resolve => setTimeout(resolve, 1000));
-
+      
       return true;
     } catch (error) {
       console.error('Order submission failed:', error);

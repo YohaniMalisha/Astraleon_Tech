@@ -21,6 +21,7 @@ import { PackageProvider } from "./context/PackageContext";
 import { AuthProvider } from "@/context/AuthContext";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import VerifyEmail from "@/components/VerifyEmail";
 
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
                 {/* Auth Routes */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/verify-email/:token" element={<VerifyEmail />} />
 
                 {/* Packages Nested Routes */}
                 <Route path="/packages" element={<PackagesPage />}>
@@ -66,5 +68,4 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
-
 export default App;

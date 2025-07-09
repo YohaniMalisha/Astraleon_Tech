@@ -14,20 +14,25 @@ export default function Signup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!name || !email || !password) {
+      toast.error('Please fill all fields');
+      return;
+    }
+
+    if (password.length < 8) {
+      toast.error('Password must be at least 8 characters');
+      return;
+    }
+
     setIsLoading(true);
     
     try {
       await register(name, email, password);
-      toast.success("Account created!", {
-        description: "Check your email to verify your account",
-        position: "top-center"
-      });
-      navigate('/packages');
+      toast.success('Account created! Check your email to verify your account');
+      navigate('/verify-email');
     } catch (error) {
-      toast.error("Registration failed", {
-        description: error.message,
-        position: "top-center"
-      });
+      toast.error(error.message || 'Registration failed');
     } finally {
       setIsLoading(false);
     }
