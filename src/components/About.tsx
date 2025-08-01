@@ -46,7 +46,7 @@ const About = () => {
   const teamMembers = [
     {
       name: "Yohani Wimalasena",
-      role: "Founder & CEO",
+      role: "Developer",
       expertise: "Full-Stack Development",
       img: "/Team/Yohani.jpg",
       color: "from-purple-500 to-blue-500"

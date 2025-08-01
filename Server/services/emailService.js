@@ -1,65 +1,34 @@
-const nodemailer = require('nodemailer');
-const ejs = require('ejs');
-const path = require('path');
-require('dotenv').config();
+const nodemailer = require("nodemailer");
 
-// Create transporter (for Gmail - use OAuth2 in production)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
+    pass: process.env.EMAIL_PASS,
+  },
 });
 
-// Email templates directory
-const templatesDir = path.join(__dirname, '../templates/emails');
-
 /**
- * Send order confirmation to client
+ * Send a verification email with a clickable link.
+ * @param {string} to - The recipient's email address.
+ * @param {string} token - The unique verification token.
  */
-const sendOrderConfirmation = async (order, userEmail) => {
-  try {
-    const html = await ejs.renderFile(
-      path.join(templatesDir, 'order-confirmation.ejs'),
-      { order }
-    );
+const sendVerificationEmail = async (to, token) => {
+  const verifyUrl = `${process.env.BASE_URL}/verify-email/${token}`;
 
-    await transporter.sendMail({
-      from: `"Your Company Name" <${process.env.EMAIL_USER}>`,
-      to: userEmail,
-      subject: 'Your Order Confirmation',
-      html
-    });
-  } catch (error) {
-    console.error('Confirmation email failed:', error);
-    throw error;
-  }
+  const mailOptions = {
+    from: `"Astraleon Tech" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: "Verify Your Email - Astraleon Tech",
+    html: `
+      <h2>Email Verification</h2>
+      <p>Click the link below to verify your email address:</p>
+      <a href="${verifyUrl}" target="_blank">${verifyUrl}</a>
+      <p>This link will expire in 24 hours.</p>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
 };
 
-/**
- * Send order notification to admin
- */
-const sendAdminNotification = async (order) => {
-  try {
-    const html = await ejs.renderFile(
-      path.join(templatesDir, 'admin-notification.ejs'),
-      { order }
-    );
-
-    await transporter.sendMail({
-      from: `"Order System" <${process.env.EMAIL_USER}>`,
-      to: process.env.ADMIN_EMAIL,
-      subject: `New Order Received - ${order.package.name}`,
-      html
-    });
-  } catch (error) {
-    console.error('Admin notification failed:', error);
-    throw error;
-  }
-};
-
-module.exports = {
-  sendOrderConfirmation,
-  sendAdminNotification
-};
+module.exports = { sendVerificationEmail };

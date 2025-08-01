@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-// define your admin routes
+// define your order routes
 
 module.exports = router;

@@ -21,7 +21,8 @@ import { PackageProvider } from "./context/PackageContext";
 import { AuthProvider } from "@/context/AuthContext";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
-import VerifyEmail from "@/components/VerifyEmail";
+import VerifyEmail from "./pages/VerifyEmail";
+
 
 
 const queryClient = new QueryClient();
