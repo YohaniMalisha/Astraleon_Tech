@@ -1,7 +1,9 @@
 User-agent: *
 Allow: /
+
 Sitemap: https://effervescent-fairy-f25edc.netlify.app/sitemap.xml
-glebot
+
+User-agent: Googlebot
 Allow: /
 
 User-agent: Bingbot
@@ -11,7 +13,4 @@ User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
-Allow: /
-
-User-agent: *
 Allow: /
