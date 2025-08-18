@@ -136,7 +136,7 @@ const Hero = () => {
               className="contents"
             >
               {[ 
-                { number: "200+", text: "Websites Delivered" },
+                { number: "100+", text: "Websites Delivered" },
                 { number: "99%", text: "Client Satisfaction" },
                 { number: "24/7", text: "Online Support" },
                 { number: "5★", text: "Average Rating" }

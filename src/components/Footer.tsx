@@ -54,7 +54,8 @@ const Footer = () => {
               {[
                 { name: 'Home', path: '/' },
                 { name: 'Services', path: '/services' },
-                { name: 'Portfolio', path: '/portfolio' },
+                { name: 'Ongoing Projects', path: '/ongoing-projects' },
+                { name: 'Completed Projects', path: '/completed-projects' },
                 { name: 'Contact', path: '/contact' }
               ].map((link, index) => (
                 <motion.li key={index} whileHover={{ x: 5 }}>

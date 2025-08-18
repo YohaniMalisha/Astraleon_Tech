@@ -1,6 +1,6 @@
-const express = require('express');
-const router = express.Router();
+// const express = require('express');
+// const router = express.Router();
 
-// define your admin routes
+// // define your admin routes
 
-module.exports = router;
+// module.exports = router;

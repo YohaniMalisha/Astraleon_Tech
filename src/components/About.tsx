@@ -1,46 +1,54 @@
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { 
-  Code, Globe, Users, Shield,
-  Zap, Palette, UsersIcon, ArrowRight,
-  CircleDashed, PieChart, Rocket
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { fadeInUp, staggerContainer, fadeIn } from '@/lib/animations';
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  Code,
+  Globe,
+  Users,
+  Shield,
+  Zap,
+  Palette,
+  UsersIcon,
+  ArrowRight,
+  CircleDashed,
+  PieChart,
+  Rocket,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { fadeInUp, staggerContainer, fadeIn } from "@/lib/animations";
 
 const About = () => {
   const [progress, setProgress] = useState([0, 0, 0, 0]);
-  
+
   const stats = [
-    { 
-      value: '200+', 
-      label: 'Projects',
+    {
+      value: "100+",
+      label: "Projects",
       percentage: 95,
       icon: <Code className="text-purple-400" size={20} />,
-      color: 'bg-purple-500'
+      color: "bg-purple-500",
     },
-    { 
-      value: '5+', 
-      label: 'Years Exp',
+    {
+      value: "5+",
+      label: "Years Exp",
       percentage: 85,
       icon: <Globe className="text-cyan-400" size={20} />,
-      color: 'bg-cyan-500'
+      color: "bg-cyan-500",
     },
-    { 
-      value: '98%', 
-      label: 'Satisfaction',
+    {
+      value: "98%",
+      label: "Satisfaction",
       percentage: 98,
       icon: <Users className="text-emerald-400" size={20} />,
-      color: 'bg-emerald-500'
+      color: "bg-emerald-500",
     },
-    { 
-      value: '24/7', 
-      label: 'Support',
+    {
+      value: "24/7",
+      label: "Support",
       percentage: 100,
       icon: <Shield className="text-amber-400" size={20} />,
-      color: 'bg-amber-500'
-    }
+      color: "bg-amber-500",
+    },
   ];
 
   const teamMembers = [
@@ -49,15 +57,15 @@ const About = () => {
       role: "Developer",
       expertise: "Full-Stack Development",
       img: "/Team/Yohani.jpg",
-      color: "from-purple-500 to-blue-500"
+      color: "from-purple-500 to-blue-500",
     },
     {
-      name: "J K S Prabhash", 
-      role: "Creative Director",
-      expertise: "UI/UX Design",
+      name: "J K S Prabhash",
+      role: "Software Engineer",
+      expertise: "Backend Development, Data Analysis, AI/ML",
       img: "/Team/Keshan.jpg",
-      color: "from-cyan-500 to-emerald-500"
-    }
+      color: "from-cyan-500 to-emerald-500",
+    },
   ];
 
   const coreValues = [
@@ -65,32 +73,32 @@ const About = () => {
       title: "Innovation",
       description: "Cutting-edge solutions that push boundaries",
       icon: <Zap className="text-purple-400" size={20} />,
-      color: "purple"
+      color: "purple",
     },
     {
       title: "Quality",
       description: "Excellence in every deliverable we create",
       icon: <Palette className="text-cyan-400" size={20} />,
-      color: "cyan"
+      color: "cyan",
     },
     {
       title: "Collaboration",
       description: "Working together for shared success",
       icon: <UsersIcon className="text-emerald-400" size={20} />,
-      color: "emerald"
-    }
+      color: "emerald",
+    },
   ];
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setProgress(stats.map(stat => stat.percentage));
+      setProgress(stats.map((stat) => stat.percentage));
     }, 500);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <motion.div 
+    <motion.div
       initial="initial"
       animate="animate"
       exit="exit"
@@ -105,7 +113,7 @@ const About = () => {
 
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
         {/* Hero Section */}
-        <motion.section 
+        <motion.section
           className="mb-16 md:mb-20 text-center"
           variants={fadeInUp}
         >
@@ -116,36 +124,40 @@ const About = () => {
             <Rocket className="mr-2" size={16} />
             OUR STORY
           </motion.div>
-          <motion.h2 
+          <motion.h2
             variants={fadeInUp}
             transition={{ delay: 0.2 }}
             className="text-4xl md:text-5xl font-bold text-white mb-4"
           >
-            About <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Codentra</span>
+            About{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+              Astraleon Tech
+            </span>
           </motion.h2>
           <motion.p
             variants={fadeInUp}
             transition={{ delay: 0.4 }}
             className="text-lg text-gray-300 max-w-3xl mx-auto"
           >
-            We combine cutting-edge technology with creative vision to deliver transformative digital experiences.
+            We combine cutting-edge technology with creative vision to deliver
+            transformative digital experiences.
           </motion.p>
         </motion.section>
 
         {/* Stats Section with Circular Charts */}
-        <motion.div 
+        <motion.div
           className="mb-20 md:mb-24"
           variants={fadeInUp}
           transition={{ delay: 0.6 }}
         >
-          <motion.div 
+          <motion.div
             variants={staggerContainer}
             initial="hidden"
             animate="show"
             className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8"
           >
             {stats.map((stat, index) => (
-              <motion.div 
+              <motion.div
                 key={index}
                 variants={fadeInUp}
                 className="flex flex-col items-center"
@@ -168,19 +180,25 @@ const About = () => {
                       stroke="currentColor"
                       strokeWidth="3"
                       strokeLinecap="round"
-                      className={`text-${stat.color.split('-')[1]}-400`}
-                      initial={{ strokeDasharray: '0, 100' }}
-                      animate={{ 
-                        strokeDasharray: `${progress[index]}, ${100 - progress[index]}`,
-                        transition: { duration: 1.5, ease: "easeOut" }
+                      className={`text-${stat.color.split("-")[1]}-400`}
+                      initial={{ strokeDasharray: "0, 100" }}
+                      animate={{
+                        strokeDasharray: `${progress[index]}, ${
+                          100 - progress[index]
+                        }`,
+                        transition: { duration: 1.5, ease: "easeOut" },
                       }}
                     />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <div className={`p-2 rounded-full mb-1 ${stat.color} bg-opacity-20`}>
+                    <div
+                      className={`p-2 rounded-full mb-1 ${stat.color} bg-opacity-20`}
+                    >
                       {stat.icon}
                     </div>
-                    <span className="text-2xl font-bold text-white">{stat.value}</span>
+                    <span className="text-2xl font-bold text-white">
+                      {stat.value}
+                    </span>
                   </div>
                 </div>
                 <h3 className="text-sm font-medium text-gray-300 text-center">
@@ -192,7 +210,7 @@ const About = () => {
         </motion.div>
 
         {/* Story + Values Section */}
-        <motion.div 
+        <motion.div
           className="mb-20 md:mb-24 grid md:grid-cols-2 gap-8"
           variants={fadeInUp}
           transition={{ delay: 0.8 }}
@@ -207,9 +225,19 @@ const About = () => {
               <h3 className="text-xl font-bold text-white">Our Journey</h3>
             </div>
             <div className="space-y-4 text-gray-300">
-              <p>Founded in 2018, Codentra began as a passionate team of developers with a vision to transform digital experiences.</p>
-              <p>Today, we're a full-service digital agency serving global clients with award-winning solutions that drive real business results.</p>
-              <p>Our story is one of continuous innovation, learning, and commitment to client success.</p>
+              <p>
+                Founded in 2020, Astraleon Tech began as a passionate team of
+                developers with a vision to transform digital experiences.
+              </p>
+              <p>
+                Today, we're a full-service digital agency serving global
+                clients with award-winning solutions that drive real business
+                results.
+              </p>
+              <p>
+                Our story is one of continuous innovation, learning, and
+                commitment to client success.
+              </p>
             </div>
           </motion.div>
 
@@ -230,7 +258,9 @@ const About = () => {
                   whileHover={{ x: 5 }}
                   className="flex items-start p-4 rounded-lg bg-gradient-to-r from-gray-800 to-gray-900"
                 >
-                  <div className={`p-2 rounded-full mr-4 bg-${value.color}-500 bg-opacity-20`}>
+                  <div
+                    className={`p-2 rounded-full mr-4 bg-${value.color}-500 bg-opacity-20`}
+                  >
                     {value.icon}
                   </div>
                   <div>
@@ -244,16 +274,20 @@ const About = () => {
         </motion.div>
 
         {/* Team Section */}
-        <motion.section 
+        <motion.section
           className="mb-20 md:mb-24"
           variants={fadeInUp}
           transition={{ delay: 1.2 }}
         >
           <motion.div variants={fadeInUp} className="text-center mb-12">
-            <h3 className="text-purple-400 text-sm uppercase tracking-wider mb-3">Meet The Team</h3>
-            <h2 className="text-3xl font-bold text-white">The Minds Behind The Magic</h2>
+            <h3 className="text-purple-400 text-sm uppercase tracking-wider mb-3">
+              Meet The Team
+            </h3>
+            <h2 className="text-3xl font-bold text-white">
+              The Minds Behind The Magic
+            </h2>
           </motion.div>
-          
+
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -269,14 +303,16 @@ const About = () => {
               >
                 <div className="bg-gray-900/80 backdrop-blur-sm p-6 flex items-center h-full">
                   <div className="w-20 h-20 rounded-full overflow-hidden mr-6 border-4 border-white/10">
-                    <img 
-                      src={member.img} 
+                    <img
+                      src={member.img}
                       alt={member.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">{member.name}</h3>
+                    <h3 className="text-xl font-bold text-white">
+                      {member.name}
+                    </h3>
                     <p className="text-white/80 text-sm mb-2">{member.role}</p>
                     <p className="text-white/60 text-xs">{member.expertise}</p>
                   </div>
@@ -287,25 +323,27 @@ const About = () => {
         </motion.section>
 
         {/* CTA Section */}
-        <motion.section 
+        <motion.section
           variants={fadeInUp}
           transition={{ delay: 1.4 }}
           className="text-center"
         >
           <div className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-2xl p-8 md:p-12 backdrop-blur-sm">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Ready to start your project?</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              Ready to start your project?
+            </h2>
             <p className="text-gray-300 mb-6 max-w-md mx-auto">
               Let's create something extraordinary together.
             </p>
-            <Link to="/contact"/>
-            <Button className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white">
-              Get Started <ArrowRight className="ml-2" size={16} />
-            </Button>
+            <Link to="/contact">
+              <Button className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white">
+                Get Started <ArrowRight className="ml-2" size={16} />
+              </Button>
+            </Link>
           </div>
         </motion.section>
       </div>
     </motion.div>
-    
   );
 };
 

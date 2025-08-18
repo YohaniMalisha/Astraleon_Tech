@@ -1,43 +1,82 @@
-// app/src/features/auth/components/VerifyEmail.tsx
-import { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import api from '@/lib/api';
-import { useToast } from '@/components/ui/use-toast';
+// // app/src/features/auth/components/VerifyEmail.tsx
+// import { useEffect, useState } from "react";
+// import { useParams, useNavigate, Link } from "react-router-dom";
+// import api from "@/lib/api";
+// import { Loader2, CheckCircle, XCircle } from "lucide-react";
 
-export default function VerifyEmail() {
-  const { token } = useParams();
-  const navigate = useNavigate();
-  const { toast } = useToast();
+// export default function VerifyEmail() {
+//   const { token } = useParams();
+//   const navigate = useNavigate();
+//   const [status, setStatus] = useState<"verifying" | "success" | "error">(
+//     "verifying"
+//   );
+//   const [message, setMessage] = useState(
+//     "Please wait while we verify your email address."
+//   );
 
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        await api.get(`/auth/verify/${token}`);
-        toast({
-          title: 'Email Verified',
-          description: 'Your email has been successfully verified!',
-          variant: 'default'
-        });
-        navigate('/dashboard');
-      } catch (error) {
-        toast({
-          title: 'Verification Failed',
-          description: error.response?.data?.error || 'Invalid or expired token',
-          variant: 'destructive'
-        });
-        navigate('/login');
-      }
-    };
+//   useEffect(() => {
+//     if (!token) {
+//       setStatus("error");
+//       setMessage("No verification token provided.");
+//       return;
+//     }
 
-    verifyToken();
-  }, [token, navigate, toast]);
+//     const verifyToken = async () => {
+//       try {
+//         const res = await api.get(`/auth/verify/${token}`);
+//         setStatus("success");
+//         setMessage(
+//           res.data.message || "Your email has been successfully verified!"
+//         );
+//         setTimeout(() => navigate("/login"), 5000); // Redirect to login after 5 seconds
+//       } catch (error: any) {
+//         setStatus("error");
+//         setMessage(
+//           error.response?.data?.error ||
+//             "Invalid or expired token. Please try registering again."
+//         );
+//       }
+//     };
 
-  return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">Verifying your email...</h1>
-        <p>Please wait while we verify your email address.</p>
-      </div>
-    </div>
-  );
-}
+//     verifyToken();
+//   }, [token, navigate]);
+
+//   const StatusIcon = () => {
+//     if (status === "verifying")
+//       return <Loader2 className="w-16 h-16 text-blue-400 animate-spin" />;
+//     if (status === "success")
+//       return <CheckCircle className="w-16 h-16 text-green-400" />;
+//     if (status === "error")
+//       return <XCircle className="w-16 h-16 text-red-400" />;
+//     return null;
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-black to-black flex items-center justify-center p-4">
+//       <div className="w-full max-w-md bg-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center">
+//         <div className="flex justify-center mb-6">
+//           <StatusIcon />
+//         </div>
+//         <h1 className="text-2xl font-bold text-white mb-4">
+//           {status === "verifying" && "Verifying Your Email..."}
+//           {status === "success" && "Verification Successful!"}
+//           {status === "error" && "Verification Failed"}
+//         </h1>
+//         <p className="text-gray-400 mb-6">{message}</p>
+//         {status === "success" && (
+//           <p className="text-sm text-gray-500">
+//             You will be redirected to the login page shortly.
+//           </p>
+//         )}
+//         {status !== "verifying" && (
+//           <Link
+//             to="/login"
+//             className="mt-4 inline-block text-blue-400 hover:text-blue-300"
+//           >
+//             Go to Login
+//           </Link>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }

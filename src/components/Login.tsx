@@ -1,90 +1,84 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, Loader2 } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { toast } from 'sonner';
+// import { useEffect, useState } from "react";
+// import { Link, useNavigate, useParams } from "react-router-dom";
+// import { CheckCircle, Loader2, XCircle } from "lucide-react";
+// import api from "@/lib/api";
 
-export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
+// export default function VerifyEmail() {
+//   const { token } = useParams();
+//   const navigate = useNavigate();
+//   const [status, setStatus] = useState<"verifying" | "success" | "error">(
+//     "verifying"
+//   );
+//   const [message, setMessage] = useState(
+//     "Please wait while we verify your email address."
+//   );
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    try {
-      await login(email, password);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+//   useEffect(() => {
+//     if (!token) {
+//       setStatus("error");
+//       setMessage(
+//         "No verification token provided. Please check your email link."
+//       );
+//       return;
+//     }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-black to-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-          <p className="text-gray-400">Access your account to continue</p>
-        </div>
+//     const verifyToken = async () => {
+//       try {
+//         const res = await api.get(`/auth/verify/${token}`);
+//         setStatus("success");
+//         setMessage(
+//           res.data.message || "Your email has been successfully verified!"
+//         );
+//         // Redirect to login after a short delay
+//         setTimeout(() => navigate("/login"), 5000);
+//       } catch (error: any) {
+//         setStatus("error");
+//         setMessage(
+//           error.response?.data?.error ||
+//             "Invalid or expired token. Please try registering again."
+//         );
+//       }
+//     };
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label className="text-gray-300 text-sm font-medium">Email</label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="your@email.com"
-                required
-              />
-            </div>
-          </div>
+//     verifyToken();
+//   }, [token, navigate]);
 
-          <div className="space-y-2">
-            <label className="text-gray-300 text-sm font-medium">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="••••••••"
-                required
-                minLength={8}
-              />
-            </div>
-          </div>
+//   const StatusIcon = () => {
+//     if (status === "verifying")
+//       return <Loader2 className="w-16 h-16 text-blue-400 animate-spin" />;
+//     if (status === "success")
+//       return <CheckCircle className="w-16 h-16 text-green-400" />;
+//     if (status === "error")
+//       return <XCircle className="w-16 h-16 text-red-400" />;
+//     return null;
+//   };
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg flex items-center justify-center transition-all disabled:opacity-70"
-          >
-            {isLoading ? (
-              <Loader2 className="animate-spin mr-2" size={20} />
-            ) : (
-              <Lock className="mr-2" size={20} />
-            )}
-            Sign In
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-gray-400">
-          Don't have an account?{' '}
-          <Link to="/signup" className="text-blue-400 hover:text-blue-300">
-            Create one
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-black to-black flex items-center justify-center p-4">
+//       <div className="w-full max-w-md bg-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center">
+//         <div className="flex justify-center mb-6">
+//           <StatusIcon />
+//         </div>
+//         <h1 className="text-2xl font-bold text-white mb-4">
+//           {status === "verifying" && "Verifying Your Email..."}
+//           {status === "success" && "Verification Successful!"}
+//           {status === "error" && "Verification Failed"}
+//         </h1>
+//         <p className="text-gray-400 mb-6">{message}</p>
+//         {status === "success" && (
+//           <p className="text-sm text-gray-500">
+//             You will be redirected to the login page shortly.
+//           </p>
+//         )}
+//         {status !== "verifying" && (
+//           <Link
+//             to="/login"
+//             className="mt-4 inline-block text-blue-400 hover:text-blue-300 font-semibold"
+//           >
+//             Go to Login
+//           </Link>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
