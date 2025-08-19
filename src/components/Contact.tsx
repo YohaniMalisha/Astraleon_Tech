@@ -4,13 +4,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Mail, Phone, MessageSquare, Clock, 
-  Zap, Shield, Palette, Send, Rocket, Loader2 
+import {
+  Mail,
+  Phone,
+  MessageSquare,
+  Clock,
+  Zap,
+  Shield,
+  Palette,
+  Send,
+  Rocket,
+  Loader2,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { fadeInUp, fadeIn } from "@/lib/animations";
-import emailjs from '@emailjs/browser';
+import emailjs from "@emailjs/browser";
 
 const Contact = () => {
   const form = useRef<HTMLFormElement>(null);
@@ -26,7 +34,9 @@ const Contact = () => {
   });
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -40,64 +50,125 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      await emailjs.sendForm(
+      const res = await emailjs.sendForm(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         form.current!,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
 
+      // EmailJS returns status-like info; log for production debugging
+      console.info("EmailJS response", res);
+
       toast({
-        title: "🚀 Message Sent Successfully!",
+        title: "\ud83d\ude80 Message Sent Successfully!",
         description: "Astraleon Tech team will contact you within 24 hours.",
         style: {
-          backgroundColor: '#1e3a8a',
-          color: 'white',
-          border: 'none'
-        }
+          backgroundColor: "#1e3a8a",
+          color: "white",
+          border: "none",
+        },
       });
 
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        service: "",
-        message: "",
-      });
+      setFormData({ name: "", email: "", phone: "", service: "", message: "" });
     } catch (error) {
-      console.error(error);
+      console.error("EmailJS error:", error);
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again or contact us directly at astraleontech@gmail.com",
-        variant: "destructive"
+        description:
+          "Primary send failed; attempting server fallback. If that also fails, contact astraleontech@gmail.com",
+        variant: "destructive",
       });
+
+      // Attempt server-side fallback POST to /api/contact (if you have this endpoint)
+      try {
+        const fallbackResp = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL || ""}/api/contact`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          }
+        );
+
+        if (!fallbackResp.ok) {
+          const text = await fallbackResp.text().catch(() => "<no body>");
+          console.error("Fallback POST failed", fallbackResp.status, text);
+          toast({
+            title: "Fallback failed",
+            description:
+              "Server fallback failed. Please email astraleontech@gmail.com",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Message received",
+            description:
+              "We received your message via server fallback. We will contact you shortly.",
+          });
+          setFormData({
+            name: "",
+            email: "",
+            phone: "",
+            service: "",
+            message: "",
+          });
+        }
+      } catch (err2) {
+        console.error("Fallback POST exception:", err2);
+        toast({
+          title: "Error",
+          description:
+            "Unable to send message. Please email astraleontech@gmail.com",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const services = [
-    { value: "website-design", label: "Website Design", icon: <Palette className="text-primary" size={16} /> },
-    { value: "ecommerce", label: "E-commerce", icon: <Zap className="text-primary" size={16} /> },
-    { value: "seo", label: "SEO Optimization", icon: <Shield className="text-primary" size={16} /> },
-    { value: "maintenance", label: "Website Maintenance", icon: <Clock className="text-primary" size={16} /> },
+    {
+      value: "website-design",
+      label: "Website Design",
+      icon: <Palette className="text-primary" size={16} />,
+    },
+    {
+      value: "ecommerce",
+      label: "E-commerce",
+      icon: <Zap className="text-primary" size={16} />,
+    },
+    {
+      value: "seo",
+      label: "SEO Optimization",
+      icon: <Shield className="text-primary" size={16} />,
+    },
+    {
+      value: "maintenance",
+      label: "Website Maintenance",
+      icon: <Clock className="text-primary" size={16} />,
+    },
   ];
 
   const faqs = [
     {
       question: "How does the online process work?",
-      answer: "We handle everything remotely through video calls, emails, and project management tools. You'll have full visibility into the development process.",
-      icon: <MessageSquare className="text-primary" size={20} />
+      answer:
+        "We handle everything remotely through video calls, emails, and project management tools. You'll have full visibility into the development process.",
+      icon: <MessageSquare className="text-primary" size={20} />,
     },
     {
       question: "What's the typical project timeline?",
-      answer: "Most websites are completed within 2-4 weeks, depending on complexity. We'll provide a detailed timeline during our initial consultation.",
-      icon: <Clock className="text-primary" size={20} />
+      answer:
+        "Most websites are completed within 2-4 weeks, depending on complexity. We'll provide a detailed timeline during our initial consultation.",
+      icon: <Clock className="text-primary" size={20} />,
     },
     {
       question: "Do you provide ongoing support?",
-      answer: "Yes, we offer comprehensive maintenance packages to keep your website updated, secure, and performing optimally.",
-      icon: <Shield className="text-primary" size={20} />
+      answer:
+        "Yes, we offer comprehensive maintenance packages to keep your website updated, secure, and performing optimally.",
+      icon: <Shield className="text-primary" size={20} />,
     },
   ];
 
@@ -112,7 +183,7 @@ const Contact = () => {
       <main className="flex-grow py-24 px-4 relative z-10">
         <div className="container mx-auto">
           {/* Header Section - Removed animation from CONTACT ASTRALEON TECH */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -123,10 +194,14 @@ const Contact = () => {
               <span className="text-white">CONTACT ASTRALEON TECH</span>
             </div>
             <h2 className="text-5xl md:text-6xl font-bold mb-6 text-white">
-              Let's Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Together</span>
+              Let's Build{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                Together
+              </span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Have a project in mind? Reach out and let's discuss how we can bring your vision to life.
+              Have a project in mind? Reach out and let's discuss how we can
+              bring your vision to life.
             </p>
           </motion.div>
 
@@ -145,9 +220,17 @@ const Contact = () => {
                 </CardHeader>
                 <CardContent>
                   <form ref={form} onSubmit={sendEmail} className="space-y-6">
-                    <input type="hidden" name="contact_number" value={Date.now()} />
-                    <input type="hidden" name="to_email" value="astraleontech@gmail.com" />
-                    
+                    <input
+                      type="hidden"
+                      name="contact_number"
+                      value={Date.now()}
+                    />
+                    <input
+                      type="hidden"
+                      name="to_email"
+                      value="astraleontech@gmail.com"
+                    />
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="block text-sm font-medium text-gray-300">
@@ -203,9 +286,15 @@ const Contact = () => {
                           onChange={handleInputChange}
                           className="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
                         >
-                          <option value="" className="text-gray-500">Select a service</option>
+                          <option value="" className="text-gray-500">
+                            Select a service
+                          </option>
                           {services.map((service) => (
-                            <option key={service.value} value={service.value} className="bg-gray-800">
+                            <option
+                              key={service.value}
+                              value={service.value}
+                              className="bg-gray-800"
+                            >
                               {service.label}
                             </option>
                           ))}
@@ -229,21 +318,29 @@ const Contact = () => {
                     </div>
 
                     {/* Modified Send Button - Smaller and rounded edges */}
-                    <motion.button 
+                    <motion.button
                       type="submit"
                       disabled={isSubmitting}
                       className="w-full py-4 text-lg font-bold relative overflow-hidden group rounded-full" // Changed py-6 to py-4 and added rounded-full
                     >
-                      <span className={`absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 ${isSubmitting ? 'opacity-80' : 'group-hover:from-blue-700 group-hover:to-blue-800'} transition-all duration-300 rounded-full`}></span>
+                      <span
+                        className={`absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 ${
+                          isSubmitting
+                            ? "opacity-80"
+                            : "group-hover:from-blue-700 group-hover:to-blue-800"
+                        } transition-all duration-300 rounded-full`}
+                      ></span>
                       <span className="relative z-10 flex items-center justify-center">
                         {isSubmitting ? (
                           <>
-                            <Loader2 className="mr-3 h-5 w-5 animate-spin" /> {/* Adjusted size */}
+                            <Loader2 className="mr-3 h-5 w-5 animate-spin" />{" "}
+                            {/* Adjusted size */}
                             <span>Sending...</span>
                           </>
                         ) : (
                           <>
-                            <Send className="mr-3 h-5 w-5" /> {/* Adjusted size */}
+                            <Send className="mr-3 h-5 w-5" />{" "}
+                            {/* Adjusted size */}
                             <span>Send Message</span>
                           </>
                         )}
@@ -286,9 +383,7 @@ const Contact = () => {
                           <h4 className="text-xl font-semibold text-white mb-2">
                             {faq.question}
                           </h4>
-                          <p className="text-gray-400">
-                            {faq.answer}
-                          </p>
+                          <p className="text-gray-400">{faq.answer}</p>
                         </div>
                       </div>
                     </CardContent>
