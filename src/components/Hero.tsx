@@ -65,7 +65,7 @@ const Hero = () => {
                 </Button>
               </motion.div>
             </Link>
-            <Link to="/portfolio">
+            <Link to="/completed-projects">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
